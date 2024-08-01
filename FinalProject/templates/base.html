@@ -1,0 +1,15 @@
+<!-- template inheritance -->
+{% include 'header.html' %}
+<div class="myrow2 row mt-2">
+
+{% include 'sidebar.html' %}
+
+    <div class="box col-10">
+        Main Content
+        {% block 'main' %}
+        {% endblock 'main' %}
+    </div> 
+
+</div>
+
+{% include 'footer.html' %}
