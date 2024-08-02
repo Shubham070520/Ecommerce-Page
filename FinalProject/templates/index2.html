@@ -1,21 +1,25 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block 'main' %}
 <div class="row mx-auto">
-    <div class="card col-md-3 m-2" style="width: 18rem;">
+  {% for Pet in pets %}
+    <!-- <div class="card col-md-3 m-2" style="width: 18rem;"> -->
+  <div class="card col-md-3 m-2">
         <br>
         <br>
         <img src="{% static 'images/sig-sauer-p320-m18-new-guns-2019-f.jpg' %}" class="card-img-top" alt="...">
       <div class="card-body">
-          <h5 class="card-title">Sig Sauer P320 M18</h5><br>
-          <p class="card-text">The SIG Sauer P320 is a modular semi-automatic pistol made by SIG Sauer, Inc. 
-            It is a further development of the SIG Sauer P250. The P320 can be chambered in 9×19mm Parabellum</p>
-          <strong>Rs 40000</strong>
+          <h5 class="card-title">{{Pet.breed}}</h5><br>
+          <h5 class="card-text">Type: {{Pet.type}}</h5><br>
+          <p class="card-text">Gender: {{Pet.gender}}</p>
+          <p class="card-text">Description : {{Pet.description}}</p>
+          <strong>Rs.{{Pet.price}} </strong>
           <br>
-          <a href="#" class="btn btn-primary">View Details</a>
+
+          <a href="/details/{{Pet.id}}" class="btn btn-primary">View Details</a>
           <a href="#" class="btn btn-primary">Add to cart</a>
-    </div>
+      </div>
   </div>
+  {% endfor %}
 </div>
 {% endblock 'main' %}

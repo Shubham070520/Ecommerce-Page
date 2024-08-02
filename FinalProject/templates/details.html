@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block 'main' %}
+<div class="row mt-2">
+    <div class="col-6">
+        <img src="{% static 'images/sig-sauer-p320-m18-new-guns-2019-f.jpg' %}" height="450" width="650" alt="">
+    </div>
+    <div class="col-6 ">
+        <div class="card" style="width: 100%;">
+          <div class="card-body">
+                <h5 class="card-title">{{pets.breed}}</h5>
+                <p class="card-text">Type: {{pets.type}}</p><br>
+                <p class="card-text">Gender: {{pets.gender}}</p><br>
+                <p class="card-text">Description : {{pets.description}}</p>
+                <strong>Rs.{{pets.price}} </strong>
+                <br>
+                <a href="#" class="btn btn-primary">Add to cart</a>
+                <a href="/" class="btn btn-primary">Back </a>
+          </div>
+        </div>    
+    </div>
+</div>
+
+{% endblock 'main' %}
