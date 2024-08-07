@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse
 from django.shortcuts import render,redirect
-from Pet.models import Pet
+from Pet.models import Pet,Cart
 from django.contrib.auth.models import User
 from django.contrib import messages #to add message
 from django.contrib.auth import authenticate,login,logout
@@ -29,7 +29,7 @@ def registerUser(request):
         #capture values entered by user
         #insert in db
         #redirect to login if registration is successful else registration page
-        u = request.POST['username'] # to capture values  #name = 'username' defined in register.html
+        u = request.POST['username'] # to capture values  #name = 'username' defined in register.html......similarly for others
         e = request.POST['email']   # to capture values
         p = request.POST['password']  # to capture values
         cp = request.POST['confirm_pwd']  # to capture values
@@ -56,16 +56,44 @@ def userLogin(request):
         u = request.POST['username']
         p = request.POST['password']
         user = authenticate(username=u, password=p)
-        if user is not None: #verified user
-            login(request, user)
-            return redirect('/home')
-        else: #not verified
+        # if user is not None: #verified user
+        #     login(request, user)
+        #     return redirect('/')
+        # else: #not verified
+        #     context = {'Error': "Invalid Credentials"}
+        #     return render(request, 'login.html', context)
+        if user == None:
             context = {'Error': "Invalid Credentials"}
             return render(request, 'login.html', context)
+        else:
+            login(request, user)
+            # messages.success(request,'Logged in successfully!')
+            return redirect('/')
         # print(user)
         # return redirect('/')
-        #what is session management and why to implement it ----asked in mock
+        #what is session management and why to implement it ----asked in interview mock
+
+def userLogout(request):
+    logout(request)  #user object is in request
+    messages.success(request,'Logged out successfully!')
+    return redirect('/')       
+
+def addtocart(request,pet_id):
+    user_id = request.user.id
+    context = {}
+    if user_id == None:
+        context['Error'] = "Please Login First"
+        return render(request,'login.html',context)
+    else:
+        #cart will add if pet and user object is known
+        users = User.objects.filter(id=user_id)
+        pets = Pet.objects.filter(id=pet_id)
         
+        cart = Cart.objects.create(pid = pets[0],uid = users [0])
+        cart.save()
+        messages.success(request,'Pet is added to cart!')
+        return redirect('/')
+
 
 
         

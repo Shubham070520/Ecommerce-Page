@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Pet(models.Model):
@@ -9,3 +10,10 @@ class Pet(models.Model):
     description = models.CharField(max_length=200)
     price = models.IntegerField()
     age = models.IntegerField()
+
+#django by default assigns id which will be foreign key in cart 
+
+class Cart(models.Model):
+    pid = models.ForeignKey(Pet,on_delete=models.CASCADE, db_column='pid')
+    uid = models.ForeignKey(User, on_delete=models.CASCADE ,db_column='uid')
+    quantity = models.IntegerField(default=1)
