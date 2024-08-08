@@ -1,0 +1,13 @@
+Explain the request response lifecycle in django
+what is session management and why to implement it
+difference in render and redirect
+what is orm and explain orm querries
+explain any function defined in views
+MVT architecture
+explain Django template language
+what is template inheritance and why to implement it
+how to do template mapping
+payment gateway
+gmail integration
+difference between function based views and class based views
+

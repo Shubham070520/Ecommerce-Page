@@ -8,4 +8,6 @@ urlpatterns=[
     path('login',views.userLogin),
     path('logout',views.userLogout),
     path('addtocart/<pet_id>',views.addtocart),
+    path('showCart',views.showUserCart),
+    path('removepet/<cartid>',views.removeCart)
 ]

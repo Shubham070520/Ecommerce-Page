@@ -30,24 +30,28 @@ def registerUser(request):
         #insert in db
         #redirect to login if registration is successful else registration page
         u = request.POST['username'] # to capture values  #name = 'username' defined in register.html......similarly for others
-        e = request.POST['email']   # to capture values
-        p = request.POST['password']  # to capture values
-        cp = request.POST['confirm_pwd']  # to capture values
-        # validation
-        if u=='' or e=='' or p=='' or cp== '' :
-            context = {'Error': "All fields are compulsory"}
-            return render(request,'register.html',context)
-        elif p != cp:
-            context = {'Error': "Passwords don't match"}
+        if User.objects.get(username = u) is not None:
+            context = {'Error': "Username already exists"}
             return render(request,'register.html',context)
         else:
+            e = request.POST['email']   # to capture values
+            p = request.POST['password']  # to capture values
+            cp = request.POST['confirm_pwd']  # to capture values
+        # validation
+            if u=='' or e=='' or p=='' or cp== '' :
+                context = {'Error': "All fields are compulsory"}
+                return render(request,'register.html',context)
+            elif p != cp:
+                context = {'Error': "Passwords don't match"}
+                return render(request,'register.html',context)
+            else:
 
         # o = User.objects.create (username= u,email=e,password=p) with this password is not encrypted
-            u = User.objects.create (username= u,email=e)  #orm query
-            u.set_password(p) #to set encrypted password
-            u.save()
-            messages.success(request,'Registered successfully,Please Login')
-            return redirect('/login')
+                u = User.objects.create (username= u,email=e)  #orm query
+                u.set_password(p) #to set encrypted password
+                u.save()
+                messages.success(request,'Registered successfully,Please Login')
+                return redirect('/login')
         
 def userLogin(request):
     if request.method == 'GET':
@@ -71,7 +75,6 @@ def userLogin(request):
             return redirect('/')
         # print(user)
         # return redirect('/')
-        #what is session management and why to implement it ----asked in interview mock
 
 def userLogout(request):
     logout(request)  #user object is in request
@@ -93,7 +96,24 @@ def addtocart(request,pet_id):
         cart.save()
         messages.success(request,'Pet is added to cart!')
         return redirect('/')
+    
+def showUserCart(request):
+    user = request.user
+    cart = Cart.objects.filter(uid=user.id)
+    totalBill = 0
+    for c in cart:
+        totalBill = totalBill + c.pid.price*c.quantity
+        count = len(cart)
+        context={}
+        context ['cart'] = cart
+        context ['totalBill'] = totalBill
+        context ['count'] = count 
+        return render(request,'showCart.html',context)
 
-
+def removeCart(request,cartid):
+    cart = Cart.objects.filter(id = cartid)
+    cart.delete()
+    messages.success(request,'Pet is removed from cart!')
+    return redirect('/showCart')
 
         
