@@ -89,10 +89,10 @@ def addtocart(request,pet_id):
         return render(request,'login.html',context)
     else:
         #cart will add if pet and user object is known
-        users = User.objects.filter(id=user_id)
-        pets = Pet.objects.filter(id=pet_id)
+        user = User.objects.filter(id=user_id)
+        pet = Pet.objects.filter(id=pet_id)
         
-        cart = Cart.objects.create(pid = pets[0],uid = users [0])
+        cart = Cart.objects.create(uid = user,pid = pet)
         cart.save()
         messages.success(request,'Pet is added to cart!')
         return redirect('/')
