@@ -23,10 +23,13 @@
             <strong>{{pet.pid.type}} {{pet.pid.breed}}</strong><br>
             <strong>Rs {{pet.pid.price}}</strong><br>
             Quantity:
-            <button class="btn btn-warning">-</button>
+            {% if pet.quantity > 1 %}
+            <a class="btn btn-warning" href="/updatecart/0/{{pet.id}}">-</a>
+            {% endif %}
             <strong>Rs {{pet.quantity}}</strong><br>
             <button class="btn btn-warning">+</button><br>
-            <button href ="/removepet/{{pet.id}}" class="btn btn-primary mt-2">Remove</button>
+            <a class="btn btn-warning" href="/updatecart/1/{{pet.id}}">+</a>
+            <a href ="/removepet/{{pet.id}}" class="btn btn-warning">Remove</a>
         </div>
         {% endfor %}
     </div>

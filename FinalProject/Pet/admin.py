@@ -4,7 +4,7 @@ from Pet.models import Cart
 
 # Register your models here.
 class PetAdmin(admin.ModelAdmin):
-    list_display = ['id','name', 'type', 'breed', 'gender', 'description', 'price', 'age']
+    list_display = ['id','name', 'type', 'breed', 'gender', 'description', 'price', 'age','petimage']
     list_filter = ['type', 'breed', 'gender','price', 'age']
     search_fields = ['name', 'type', 'breed', 'gender', 'description', 'price', 'age']
 

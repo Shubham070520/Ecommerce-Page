@@ -3,7 +3,7 @@
 
 {% block 'main' %}
 <div class="row">
-    <form action="" class="col-md-4 mx-auto mt-5 shadow rounded p-2">
+    <form action="" method="POST" class="col-md-4 mx-auto mt-5 shadow rounded p-2">
     {% csrf_token %}
     <h3>Login</h3>
     {% for message in messages %}

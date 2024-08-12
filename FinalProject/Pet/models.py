@@ -10,6 +10,7 @@ class Pet(models.Model):
     description = models.CharField(max_length=200)
     price = models.IntegerField()
     age = models.IntegerField()
+    petimage = models.ImageField(upload_to='images',default=0)
 
 #django by default assigns id which will be foreign key in cart 
 

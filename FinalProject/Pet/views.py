@@ -30,21 +30,21 @@ def registerUser(request):
         #insert in db
         #redirect to login if registration is successful else registration page
         u = request.POST['username'] # to capture values  #name = 'username' defined in register.html......similarly for others
-        if User.objects.get(username = u) is not None:
-            context = {'Error': "Username already exists"}
-            return render(request,'register.html',context)
-        else:
-            e = request.POST['email']   # to capture values
-            p = request.POST['password']  # to capture values
-            cp = request.POST['confirm_pwd']  # to capture values
+        # if User.objects.get(username = u) is not None:
+        #     context = {'Error': "Username already exists"}
+        #     return render(request,'register.html',context)
+        # else:
+        e = request.POST['email']   # to capture values
+        p = request.POST['password']  # to capture values
+        cp = request.POST['confirm_pwd']  # to capture values
         # validation
-            if u=='' or e=='' or p=='' or cp== '' :
+        if u=='' or e=='' or p=='' or cp== '' :
                 context = {'Error': "All fields are compulsory"}
                 return render(request,'register.html',context)
-            elif p != cp:
+        elif p != cp:
                 context = {'Error': "Passwords don't match"}
                 return render(request,'register.html',context)
-            else:
+        else:
 
         # o = User.objects.create (username= u,email=e,password=p) with this password is not encrypted
                 u = User.objects.create (username= u,email=e)  #orm query
@@ -103,12 +103,12 @@ def showUserCart(request):
     totalBill = 0
     for c in cart:
         totalBill = totalBill + c.pid.price*c.quantity
-        count = len(cart)
-        context={}
-        context ['cart'] = cart
-        context ['totalBill'] = totalBill
-        context ['count'] = count 
-        return render(request,'showCart.html',context)
+    context={}
+    context ['cart'] = cart
+    context ['totalBill'] = totalBill
+    context ['count'] = count 
+    count = len(cart)
+    return render(request,'showCart.html',context)
 
 def removeCart(request,cartid):
     cart = Cart.objects.filter(id = cartid)
@@ -116,4 +116,11 @@ def removeCart(request,cartid):
     messages.success(request,'Pet is removed from cart!')
     return redirect('/showCart')
 
-        
+
+def updateCart(request,opr,cartid):
+    cart = Cart.objects.filter(id = cartid)
+    if opr == 1:
+        cart.update(quantity = cart[0].quantity+1)  #for update and delete we have to use filter......filter returns multiple query set
+    else: #opr == 0
+        cart.update(quantity = cart[0].quantity-1)
+    return redirect('/showcart')        

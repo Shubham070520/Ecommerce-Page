@@ -7,7 +7,7 @@
   <div class="card col-md-3 m-2">
         <br>
         <br>
-        <img src="{% static 'images/sig-sauer-p320-m18-new-guns-2019-f.jpg' %}" class="card-img-top" alt="...">
+        <img src="{{ Pet.petimage.url }}" class="card-img-top" alt="image not available">
       <div class="card-body">
           <h5 class="card-title">{{Pet.breed}}</h5><br>
           <h5 class="card-text">Type: {{Pet.type}}</h5><br>
