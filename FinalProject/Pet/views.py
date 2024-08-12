@@ -4,7 +4,6 @@ from Pet.models import Pet,Cart
 from django.contrib.auth.models import User
 from django.contrib import messages #to add message
 from django.contrib.auth import authenticate,login,logout
- 
 
 # # Create your views here.
 # def home(request):
