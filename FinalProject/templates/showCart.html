@@ -15,7 +15,7 @@
         <h3 class ="row m-2">Products</h3>
         {% for pet in cart%}
         <div class="col-6">
-            <img src="../static/Images/sig-sauer-p320-m18-new-guns-2019-f.jpg" height="200" width="350" alt="">
+            <img src="{{ Pet.petimage.url }}" height="200" width="350" alt="">
         </div>
         <br>
         <div class="col-6">
@@ -36,10 +36,10 @@
 </div>
 <div class="box col-4">
     <h3 class="bg-warning">Summary</h3>
-      <h4>Items Count: <strong>2</strong></h4>
-      <h4>Total Amount:Rs <strong>340000</strong></h4>
+      <h4>Items Count: {{ count }}<strong>2</strong></h4>
+      <h4>Total Amount:Rs <strong>{{ total }}</strong></h4>
       <br>
-      <a class="btn btn-warning" href="placeorder.html">Confirm Order</a>
-      <a class="btn btn-warning" href = "index2.html">Shop More</a>
+      <a class="btn btn-warning" href="/confirmorder.html">Confirm Order</a>
+      <a class="btn btn-warning" href = "/">Shop More</a>
 </div>
 {% endblock 'main' %}

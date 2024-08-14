@@ -4,6 +4,8 @@ from Pet.models import Pet,Cart
 from django.contrib.auth.models import User
 from django.contrib import messages #to add message
 from django.contrib.auth import authenticate,login,logout
+from django.db.models import Q  #to write min and max values
+import razorpay
 
 # # Create your views here.
 # def home(request):
@@ -103,9 +105,9 @@ def showUserCart(request):
     for c in cart:
         totalBill = totalBill + c.pid.price*c.quantity
     context={}
-    context ['cart'] = cart
-    context ['totalBill'] = totalBill
-    context ['count'] = count 
+    context['cart'] = cart
+    context['totalBill'] = totalBill
+    context['count'] = count 
     count = len(cart)
     return render(request,'showCart.html',context)
 
@@ -115,11 +117,65 @@ def removeCart(request,cartid):
     messages.success(request,'Pet is removed from cart!')
     return redirect('/showCart')
 
-
 def updateCart(request,opr,cartid):
     cart = Cart.objects.filter(id = cartid)
     if opr == 1:
         cart.update(quantity = cart[0].quantity+1)  #for update and delete we have to use filter......filter returns multiple query set
     else: #opr == 0
         cart.update(quantity = cart[0].quantity-1)
-    return redirect('/showcart')        
+    return redirect('/showcart')     
+
+def searchType(request,pet_type):
+     petList = Pet.objects.filter(type= pet_type)
+     context = {'pets':petList}
+     return render (request,'index2.html',context)   
+
+def searchRange(request):
+     min = request.GET['min']
+     max = request.GET['max']
+     condition1 = Q(price__gte = min)
+     condition2 = Q(price__lte = max)
+     petList = Pet.objects.filter(condition1 & condition2)
+     context = {'pets':petList}
+     return render (request,'index2.html',context)
+
+def sortPrice(request,dir):
+    col=''
+    if dir == 'asc':
+        col='price'
+        # petList = Pet.objects.order_by('price')
+    else:
+        col = '-price'
+        # petList = Pet.objects.order_by('-price')
+    petList = Pet.objects.all().order_by(col)
+    context = {'pets':petList}
+    return render (request,'index2.html',context)
+
+def confirmOrder(request):
+   user = request.user
+   cart = Cart.objects.filter(uid = user.id )
+   totalBill = 0
+   for c in cart:
+      totalBill += c.pid.price * c.quantity
+   count = len(cart)
+   context={}
+   context['cart']=cart
+   context['total']=totalBill
+   context['count']=count  
+   return render(request,'confirmorder.html',context)
+
+def payment(request):
+    user = request.user
+    userCart = Cart.objects.filter(uid = user.id)
+    totalBill = 0
+    for c in userCart:
+        totalBill += c.pid.price * c.quantity
+    client = razorpay.Client(auth=("rzp_test_FQnn3Glqg1rhvn", "vqmZMvBVFrUgCNxBr59YBr7C"))
+    data = { "amount": 500, "currency": "INR", "receipt": "" }
+    payment = client.order.create(data=data)
+    context = {'data' : payment}
+    return render(request,'payment.html',context)
+
+def placeOrder(request):
+
+    return redirect("/")
