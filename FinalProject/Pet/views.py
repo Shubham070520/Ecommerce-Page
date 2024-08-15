@@ -105,6 +105,7 @@ def showUserCart(request):
     for c in cart:
         totalBill = totalBill + c.pid.price*c.quantity
     context={}
+    count = 1
     context['cart'] = cart
     context['totalBill'] = totalBill
     context['count'] = count 
