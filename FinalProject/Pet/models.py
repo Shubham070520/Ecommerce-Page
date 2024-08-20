@@ -21,3 +21,9 @@ class Cart(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+class Order(models.Model):
+    orderid = models.IntegerField(primary_key=True)
+    uid = models.ForeignKey(User, on_delete=models.CASCADE ,db_column='uid')
+    pid = models.ForeignKey(Pet,on_delete=models.CASCADE, db_column='pid')
+    quantity = models.IntegerField()

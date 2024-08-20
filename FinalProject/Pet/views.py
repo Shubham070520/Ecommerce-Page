@@ -1,11 +1,12 @@
 from django.shortcuts import HttpResponse
 from django.shortcuts import render,redirect
-from Pet.models import Pet,Cart
+from Pet.models import Pet,Cart,Order
 from django.contrib.auth.models import User
 from django.contrib import messages #to add message
 from django.contrib.auth import authenticate,login,logout
 from django.db.models import Q  #to write min and max values
 import razorpay
+import random
 
 # # Create your views here.
 # def home(request):
@@ -40,11 +41,11 @@ def registerUser(request):
         cp = request.POST['confirm_pwd']  # to capture values
         # validation
         if u=='' or e=='' or p=='' or cp== '' :
-                context = {'Error': "All fields are compulsory"}
-                return render(request,'register.html',context)
+            context = {'Error': "All fields are compulsory"}
+            return render(request,'register.html',context)
         elif p != cp:
-                context = {'Error': "Passwords don't match"}
-                return render(request,'register.html',context)
+            context = {'Error': "Passwords don't match"}
+            return render(request,'register.html',context)
         else:
 
         # o = User.objects.create (username= u,email=e,password=p) with this password is not encrypted
@@ -178,5 +179,18 @@ def payment(request):
     return render(request,'payment.html',context)
 
 def placeOrder(request):
+    user = request.user
+    userCart = Cart.objects.filter(uid = user.id)
+    order_id = random.randrange(10000,99999)
+    #verify if order-id exist in db
+    #while Order.objects.filter(orderid = order_id).exists():
+
+    for c in userCart:
+        order = Order.objects.create(orderid = order_id,uid = c.user,pid = c.pid,quantity = c.quantity)
+        order.save()
+        #clear cart
+        userCart.delete()
+    messages.success(request,'Order is placed successfully!')
+
 
     return redirect("/")
