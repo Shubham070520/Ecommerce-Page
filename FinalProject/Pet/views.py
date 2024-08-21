@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.db.models import Q  #to write min and max values
 import razorpay
 import random
+from django.core.mail import send_mail
 
 # # Create your views here.
 # def home(request):
@@ -91,8 +92,8 @@ def addtocart(request,pet_id):
         return render(request,'login.html',context)
     else:
         #cart will add if pet and user object is known
-        user = User.objects.filter(id=user_id)
-        pet = Pet.objects.filter(id=pet_id)
+        user = User.objects.get(id=user_id)
+        pet = Pet.objects.filter(id=pet_id).first()
         
         cart = Cart.objects.create(uid = user,pid = pet)
         cart.save()
@@ -106,7 +107,7 @@ def showUserCart(request):
     for c in cart:
         totalBill = totalBill + c.pid.price*c.quantity
     context={}
-    count = 1
+    count = 0
     context['cart'] = cart
     context['totalBill'] = totalBill
     context['count'] = count 
@@ -176,7 +177,7 @@ def payment(request):
     data = { "amount": 500, "currency": "INR", "receipt": "" }
     payment = client.order.create(data=data)
     context = {'data' : payment}
-    return render(request,'payment.html',context)
+    return render(request,'pay.html',context)
 
 def placeOrder(request):
     user = request.user
@@ -189,8 +190,17 @@ def placeOrder(request):
         order = Order.objects.create(orderid = order_id,uid = c.user,pid = c.pid,quantity = c.quantity)
         order.save()
         #clear cart
-        userCart.delete()
+    userCart.delete()
+    msg_body = "Order id is "+ str(order_id)
+    customerEmail = user.email
+    print(customerEmail)
+    send_mail(
+    "Order placed successfully",  #subject
+    msg_body,
+    "shubhamrane016@gmail.com",   #sender
+    [customerEmail],
+    fail_silently=False,
+)
     messages.success(request,'Order is placed successfully!')
-
-
     return redirect("/")
+
