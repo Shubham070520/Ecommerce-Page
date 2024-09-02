@@ -120,8 +120,16 @@ def removeCart(request,cartid):
     messages.success(request,'Pet is removed from cart!')
     return redirect('/showCart')
 
+# def updateCart(request,opr,cartid):
+#     cart = Cart.objects.filter(id = cartid)
+#     if opr == 1:
+#         cart.update(quantity = cart[0].quantity+1)  #for update and delete we have to use filter......filter returns multiple query set
+#     else: #opr == 0
+#         cart.update(quantity = cart[0].quantity-1)
+#     return redirect('/showcart')
+# 
 def updateCart(request,opr,cartid):
-    cart = Cart.objects.filter(id = cartid)
+    cart = Cart.objects.get(id = cartid)
     if opr == 1:
         cart.update(quantity = cart[0].quantity+1)  #for update and delete we have to use filter......filter returns multiple query set
     else: #opr == 0
