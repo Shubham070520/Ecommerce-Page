@@ -211,4 +211,3 @@ def placeOrder(request):
 )
     messages.success(request,'Order is placed successfully!')
     return redirect("/")
-
